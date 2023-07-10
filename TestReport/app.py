@@ -80,9 +80,9 @@ def modal_message():
     channels_id = modal_input_value[channel_block]['channel_id']['selected_channel']
     print(channels_id)
 
-    # 캘린더에서 선택한 날짜
+    # 피쳐명
     date_block = blocks[1]['block_id']
-    select_date = modal_input_value[date_block]['day_pick']['selected_date']
+    feature_name = modal_input_value[date_block]['feature']['value']
 
     # 멘션 보낼 유저
     try:
@@ -123,15 +123,15 @@ def modal_message():
 
     # 슬랙 메시지로 텍스트 입력값 전송
     send_slack_message(
-        mention_user, select_date, test_result, daily_progress, issue_progress, dashboard, share_user
+        mention_user, feature_name, test_result, daily_progress, issue_progress, dashboard, share_user
     )
 
     return ''
 
 
-def send_slack_message(mention_user, select_date, test_result, daily_progress, issue_progress, dashboard, share_user):
+def send_slack_message(mention_user, feature_name, test_result, daily_progress, issue_progress, dashboard, share_user):
     slack_message = slack_message_block.slack_message_block(
-        mention_user, select_date, test_result, daily_progress, issue_progress, dashboard, share_user
+        mention_user, feature_name, test_result, daily_progress, issue_progress, dashboard, share_user
     )
 
     # 슬랙 메시지 전송을 위한 API Endpoint URL

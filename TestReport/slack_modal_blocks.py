@@ -1,5 +1,4 @@
 from flask import request
-from datetime import date
 
 
 def modal_block():
@@ -32,18 +31,16 @@ def modal_block():
                 {
                     "type": "input",
                     "element": {
-                        "type": "datepicker",
-                        "initial_date": f"{date.today()}",
+                        "type": "plain_text_input",
+                        "action_id": "feature",
                         "placeholder": {
                             "type": "plain_text",
-                            "text": "오늘 날짜를 선택해 주세요.",
-                            "emoji": True
-                        },
-                        "action_id": "day_pick"
+                            "text": "QA 진행 중인 피쳐명을 작성해주세요"
+                        }
                     },
                     "label": {
                         "type": "plain_text",
-                        "text": "날짜 선택",
+                        "text": "Feature",
                         "emoji": True
                     }
                 },

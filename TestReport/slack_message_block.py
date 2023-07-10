@@ -1,6 +1,6 @@
+from datetime import date
 
-
-def slack_message_block(user_id, select_date, test_progress, daily_progress, issue_progress, dashboard, share_user):
+def slack_message_block(user_id, feature, test_progress, daily_progress, issue_progress, dashboard, share_user):
     message_blocks = [
         {
             "type": "header",
@@ -14,7 +14,7 @@ def slack_message_block(user_id, select_date, test_progress, daily_progress, iss
             "type": "section",
             "text": {
                 "type": "mrkdwn",
-                "text": f"{user_id} :calendar: {select_date} `피쳐명` 진행상황 공유드립니다.:pray: \n• 공유자: {share_user}"
+                "text": f"{user_id} :calendar: {date.today()} `{feature}` 진행상황 공유드립니다.:pray: \n• 공유자: {share_user}"
             }
         },
         {
