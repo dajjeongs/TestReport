@@ -78,25 +78,23 @@ def modal_message():
 
     # 메세지 보낼 채널
     global channels_id
-    channel_block = blocks[0]['block_id']
-    channels_id = modal_input_value[channel_block]['channel_id']['selected_channel']
+    channels_id = modal_input_value['channel_id']['channel_filter']['selected_option']['value']
+    print(channels_id)
+    channels_id = channels_id
 
     # 피쳐명
-    date_block = blocks[1]['block_id']
-    feature_name = modal_input_value[date_block]['feature']['value']
+    feature_name = modal_input_value['feature_name']['feature_name']['value']
 
     # 멘션 보낼 유저
     try:
-        mention_block = blocks[2]['block_id']
-        mention = modal_input_value[mention_block]['mention_user']['selected_users'][0]
+        mention = modal_input_value['mention_user']['mention_user']['selected_users'][0]
         mention_user = f"<@{mention}>"
     except:
         mention_user = ""
 
     # TC 진행률 - 테스트레일 결과 불러오기
     try:
-        test_block = blocks[3]['block_id']
-        testrail_plan = modal_input_value[test_block]['testrail_plan']['value']
+        testrail_plan = modal_input_value['testrail_no']['testrail_no']['value']
         test_rate = testrail_run.run_result(testrail_plan)
         test_progress = f"*테스트케이스 진행률* :\n{test_rate}"
     except:
@@ -104,22 +102,20 @@ def modal_message():
     test_result = f"{test_progress}"
 
     # 현재 진행상황
-    progress_block = blocks[4]['block_id']
-    progress = modal_input_value[progress_block]['progress']['value']
+    progress = modal_input_value['daily_progress']['daily_progress']['value']
     daily_progress = f"{progress}"
 
     # 이슈 및 특이사항
-    issue_block = blocks[5]['block_id']
-    issue = modal_input_value[issue_block]['issue']['value']
+    issue = modal_input_value['issue_progress']['issue_progress']['value']
     issue_progress = f"{issue}"
 
     # 첨부할 링크 - 이슈 대시보드 등...
     try:
-        dashboard_block = blocks[6]['block_id']
-        dashboard_test = modal_input_value[dashboard_block]['dashboard']['value']
+        dashboard_test = modal_input_value['dashboard']['dashboard']['value']
         dashboard = f"• <{dashboard_test}|이슈 대시보드를 참고해주세요.>"
     except:
         dashboard = ""
+
 
     # 슬랙 메시지로 텍스트 입력값 전송
     send_slack_message(
