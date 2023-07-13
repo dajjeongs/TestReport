@@ -1,7 +1,9 @@
 from flask import request
+from TestReport import channel_filter
 
 
 def modal_block():
+    initial_channels = channel_filter.channel_filter()
     slack_modal = {
         'trigger_id': request.form['trigger_id'],
         'view': {
@@ -22,10 +24,11 @@ def modal_block():
                     "element": {
                         "type": "channels_select",
                         "action_id": "channel_id",
+                        #"options": initial_channels,
                         "placeholder": {
                             "type": "plain_text",
                             "text": "리포트를 전송할 채널을 선택하세요"
-                        }
+                        },
                     }
                 },
                 {

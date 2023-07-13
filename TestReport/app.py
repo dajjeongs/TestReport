@@ -9,6 +9,7 @@ import os
 
 from TestReport.TestRail import testrail_run
 from TestReport import slack_modal_blocks, slack_message_block
+from TestReport import channel_filter
 
 ssl._create_default_https_context = ssl._create_unverified_context
 app = Flask(__name__)
@@ -42,6 +43,11 @@ def open_modal():
 
     # 모달 blocks
     slack_modal = slack_modal_blocks.modal_block()
+
+    # 테스트 코드
+    text = channel_filter.channel_filter()
+    print(text)
+
 
     # slack API에 모달 열기 요청
     response = requests.post(
@@ -78,7 +84,6 @@ def modal_message():
     global channels_id
     channel_block = blocks[0]['block_id']
     channels_id = modal_input_value[channel_block]['channel_id']['selected_channel']
-    print(channels_id)
 
     # 피쳐명
     date_block = blocks[1]['block_id']
@@ -119,7 +124,6 @@ def modal_message():
         dashboard = f"• <{dashboard_test}|이슈 대시보드를 참고해주세요.>"
     except:
         dashboard = ""
-
 
     # 슬랙 메시지로 텍스트 입력값 전송
     send_slack_message(
