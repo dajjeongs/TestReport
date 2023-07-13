@@ -9,7 +9,7 @@ import os
 
 from TestReport.TestRail import testrail_run
 from TestReport import slack_modal_blocks, slack_message_block
-from TestReport import channel_filter
+
 
 ssl._create_default_https_context = ssl._create_unverified_context
 app = Flask(__name__)
@@ -43,11 +43,6 @@ def open_modal():
 
     # 모달 blocks
     slack_modal = slack_modal_blocks.modal_block()
-
-    # 테스트 코드
-    text = channel_filter.channel_filter()
-    print(text)
-
 
     # slack API에 모달 열기 요청
     response = requests.post(

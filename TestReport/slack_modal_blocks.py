@@ -24,7 +24,6 @@ def modal_block():
                     "element": {
                         "type": "channels_select",
                         "action_id": "channel_id",
-                        #"options": initial_channels,
                         "placeholder": {
                             "type": "plain_text",
                             "text": "리포트를 전송할 채널을 선택하세요"
