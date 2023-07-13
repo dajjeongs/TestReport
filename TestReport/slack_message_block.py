@@ -1,5 +1,6 @@
 from datetime import date
 
+
 def slack_message_block(user_id, feature, test_progress, daily_progress, issue_progress, dashboard, share_user):
     message_blocks = [
         {
