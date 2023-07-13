@@ -1,5 +1,3 @@
-
-
 # def mention_bot():
 #     data = request.json
 #     event = data["event"]
@@ -18,5 +16,6 @@
 #             print(f"응답 전송에 실패했습니다. 오류: {e.response['error']}")
 #
 #     return "", 200
+
 
 

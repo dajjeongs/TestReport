@@ -2,6 +2,7 @@
 from TestReport.TestRail.testrail import APIClient
 from dotenv import load_dotenv
 import os
+import matplotlib.pyplot as plt
 
 load_dotenv()
 client = APIClient("https://musinsa.testrail.io/")
@@ -65,5 +66,21 @@ def run_result(run_id):
     failed = run_failed(run)
     untested = run_untested(run)
     run_results = f"> {progressed}\n  • {failed}\n  • {untested}"
+
+    labels = ["progress", 'fail', "pass"]
+    count = [7, 3, 3]
+    exp = [0.1, 0, 0]
+    wedgeprops = {'width': 0.7, 'edgecolor': 'w', 'linewidth': 1}
+
+    plt.pie(count, labels=labels, autopct='%.1f%%', explode=exp, wedgeprops=wedgeprops)
+
+    plt.savefig(f'chart.png')
+    plt.show()
+
     return run_results
+
+run_result(473)
+
+
+
 

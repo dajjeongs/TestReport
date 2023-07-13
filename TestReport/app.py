@@ -21,20 +21,20 @@ signing_secret = os.getenv('SIGNING_SECRET')
 
 # Slack 클라이언트 인스턴스 생성
 client = WebClient(token=slack_token)
-slack_event_adapter = SlackEventAdapter(signing_secret, '/slack', app)
-BOT_ID = client.api_call("auth.test")['user_id']
-
-
-@slack_event_adapter.on('message')
-def message(payload):
-    # print(payload)
-    event = payload.get('event', {})
-    channel_id = event.get('channel')
-    user_id = event.get('user')
-    text = f"<@{user_id}> 멘션을 받았습니다만, Slash Command를 사용해주세요."
-
-    if BOT_ID != user_id:
-        client.chat_postMessage(channel=channel_id, text=text)
+# slack_event_adapter = SlackEventAdapter(signing_secret, '/slack', app)
+# BOT_ID = client.api_call("auth.test")['user_id']
+#
+#
+# @slack_event_adapter.on('message')
+# def message(payload):
+#     # print(payload)
+#     event = payload.get('event', {})
+#     channel_id = event.get('channel')
+#     user_id = event.get('user')
+#     text = f"<@{user_id}> 멘션을 받았습니다만, Slash Command를 사용해주세요."
+#
+#     if BOT_ID != user_id:
+#         client.chat_postMessage(channel=channel_id, text=text)
 
 
 @app.route('/slash', methods=['POST'])
