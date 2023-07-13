@@ -1,9 +1,7 @@
 from flask import request
-from TestReport import channel_filter
 
 
 def modal_block():
-    initial_channels = channel_filter.channel_filter()
     slack_modal = {
         'trigger_id': request.form['trigger_id'],
         'view': {
