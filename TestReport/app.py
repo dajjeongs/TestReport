@@ -1,4 +1,4 @@
-from flask import Flask, request
+from flask import Flask, request, current_app
 import ssl
 import json
 import requests
@@ -65,11 +65,7 @@ def open_modal():
 @app.route('/modal_message', methods=['POST'])
 def modal_message():
     payload = json.loads(request.form['payload'])
-    print(payload)
-
-    view = payload['view']
-    blocks = view['blocks']
-    modal_input_value = view['state']['values']
+    modal_input_value = payload['view']['state']['values']
 
     # slash command 호출 및 모달 작성한  유저 찾기
     user = payload.get('user', {})
@@ -117,17 +113,25 @@ def modal_message():
         dashboard = ""
 
 
+    image_filename = 'chart.png'
+    image_path = os.path.join(current_app.root_path, image_filename)
+    i_response = client.files_upload_v2(channel=channels_id, file=image_path)
+    image = i_response["file"]["url_private"]
+    print(image)
+    # image = "https://files.slack.com/files-pri/T058C1KPXDF-F05H03WCU7Q/chart.png"
+
+
     # 슬랙 메시지로 텍스트 입력값 전송
     send_slack_message(
-        mention_user, feature_name, test_result, daily_progress, issue_progress, dashboard, share_user
+        mention_user, feature_name, test_result, daily_progress, issue_progress, dashboard, share_user, image
     )
 
     return ''
 
 
-def send_slack_message(mention_user, feature_name, test_result, daily_progress, issue_progress, dashboard, share_user):
+def send_slack_message(mention_user, feature_name, test_result, daily_progress, issue_progress, dashboard, share_user, image):
     slack_message = slack_message_block.slack_message_block(
-        mention_user, feature_name, test_result, daily_progress, issue_progress, dashboard, share_user
+        mention_user, feature_name, test_result, daily_progress, issue_progress, dashboard, share_user, image
     )
 
     # 슬랙 메시지 전송을 위한 API Endpoint URL
@@ -149,8 +153,10 @@ def send_slack_message(mention_user, feature_name, test_result, daily_progress, 
         data=json.dumps(message)
     )
 
-    file_path = '/Users/dajeong/PycharmProjects/TestReport/TestReport/TestRail/chart.png'
-    client.files_upload(channels=channels_id, file=file_path)
+    # image_filename = 'chart.png'
+    # image_path = os.path.join(current_app.root_path, image_filename)
+    # i_response = client.files_upload_v2(channels=channels_id, file=image_path)
+    # image_url = i_response["file"]["url_private"]
 
     if reponse.status_code == 200:
         print("메시지 전송 완료")

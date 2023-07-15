@@ -26,17 +26,19 @@ def run_total_count(run):
         'failed_count'] + run['custom_status2_count'] + run['custom_status3_count']
     return total_count
 
+
 def run_passed(run):
     passed_count = run['passed_count']
-    passed_rate = round(passed_count / run_total_count(run) * 100)
-    passed = "{} passed / pass rate : {}%" .format(passed_count, passed_rate)
-    return passed
+    # passed_rate = round(passed_count / run_total_count(run) * 100)
+    # passed = "{} passed / pass rate : {}%" .format(passed_count, passed_rate)
+    return passed_count
+
 
 def run_failed(run):
     failed_count = run['failed_count']
-    failed_rate = round(failed_count / run_total_count(run) * 100)
-    failed = "Fail rate : {}%" .format(failed_rate)
-    return failed
+    # failed_rate = round(failed_count / run_total_count(run) * 100)
+    # failed = "Fail rate : {}%" .format(failed_rate)
+    return failed_count
 
 
 def run_in_progresed(run):
@@ -48,9 +50,9 @@ def run_in_progresed(run):
 
 def run_untested(run):
     untested_count = run['untested_count']
-    untested_rate = round(untested_count / run_total_count(run) * 100)
-    untested = "Untest rate : {}%" .format(untested_rate)
-    return untested
+    # untested_rate = round(untested_count / run_total_count(run) * 100)
+    # untested = "Untest rate : {}%" .format(untested_rate)
+    return untested_count
 
 def progress_rate(run):
     progress_count = run_total_count(run) - run['untested_count'] - run['custom_status4_count']
@@ -59,38 +61,48 @@ def progress_rate(run):
     return progressed
 
 
-def failed_count(run):
-    failed_count = run['failed_count']
-    return failed_count
-
-
 def run_result(run_id):
     run = get_run(run_id)
+
     progressed = progress_rate(run)
-    failed = run_failed(run)
-    untested = run_untested(run)
-    run_results = f"> {progressed}\n  • {failed}\n  • {untested}"
-    fail = failed_count(run)
+
+    passed_count = run_passed(run)
+    passed_rate = round(passed_count / run_total_count(run) * 100)
+    passed = "{} passed / pass rate : {}%" .format(passed_count, passed_rate)
+
+    failed_count = run_failed(run)
+    failed_rate = round(failed_count / run_total_count(run) * 100)
+    failed = "Fail rate : {}%".format(failed_rate)
+
+    run_results = f"> {progressed}\n  • {passed}\n  • {failed}"
+
     print(run_results)
-    print(fail)
 
-    #pass,fail,(inprogress+untest),n/a
-    #전체 대비, 진행률, fail
+    return run_results
 
-    labels = ["progress", 'fail', "pass"]
-    count = [7, 3, 3]
-    exp = [0.1, 0, 0]
-    wedgeprops = {'width': 0.7, 'edgecolor': 'w', 'linewidth': 1}
 
-    plt.pie(count, labels=labels, autopct='%.1f%%', explode=exp, wedgeprops=wedgeprops)
-    plt.plot(labels, count)
+def run_chart(run_id):
+    run = get_run(run_id)
+    total_count = run_total_count(run)
+
+    passed_count = run_passed(run)
+
+    failed_count = run_failed(run)
+
+    untested_count = run_untested(run)
+
+    labels = ["total", "pass", 'fail', "untest"]
+    count = [total_count, passed_count, failed_count, untested_count]
+
+    plt.figure(figsize=[4, 4])
+    plt.bar(labels, count, color=['g', 'b', 'r', 'gray'], width=0.4)
 
     plt.savefig(f'chart.png')
     plt.show()
 
-    return run_results
 
 # run_result(493)
+# run_chart(493)
 
 
 
