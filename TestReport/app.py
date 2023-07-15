@@ -80,7 +80,7 @@ def modal_message():
     global channels_id
     channels_id = modal_input_value['channel_id']['channel_filter']['selected_option']['value']
     print(channels_id)
-    channels_id = channels_id
+    # channels_id = channels_id
 
     # 피쳐명
     feature_name = modal_input_value['feature_name']['feature_name']['value']
@@ -148,6 +148,9 @@ def send_slack_message(mention_user, feature_name, test_result, daily_progress, 
         },
         data=json.dumps(message)
     )
+
+    file_path = '/Users/dajeong/PycharmProjects/TestReport/TestReport/TestRail/chart.png'
+    client.files_upload(channels=channels_id, file=file_path)
 
     if reponse.status_code == 200:
         print("메시지 전송 완료")

@@ -59,13 +59,23 @@ def progress_rate(run):
     return progressed
 
 
+def failed_count(run):
+    failed_count = run['failed_count']
+    return failed_count
+
+
 def run_result(run_id):
     run = get_run(run_id)
-    #name = get_run_name(run)
     progressed = progress_rate(run)
     failed = run_failed(run)
     untested = run_untested(run)
     run_results = f"> {progressed}\n  • {failed}\n  • {untested}"
+    fail = failed_count(run)
+    print(run_results)
+    print(fail)
+
+    #pass,fail,(inprogress+untest),n/a
+    #전체 대비, 진행률, fail
 
     labels = ["progress", 'fail', "pass"]
     count = [7, 3, 3]
@@ -73,13 +83,14 @@ def run_result(run_id):
     wedgeprops = {'width': 0.7, 'edgecolor': 'w', 'linewidth': 1}
 
     plt.pie(count, labels=labels, autopct='%.1f%%', explode=exp, wedgeprops=wedgeprops)
+    plt.plot(labels, count)
 
     plt.savefig(f'chart.png')
     plt.show()
 
     return run_results
 
-run_result(473)
+# run_result(493)
 
 
 
