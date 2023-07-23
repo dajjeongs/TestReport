@@ -90,9 +90,11 @@ def modal_message():
 
     # TC 진행률 - 테스트레일 결과 불러오기
     try:
-        testrail_plan = modal_input_value['testrail_no']['testrail_no']['value']
-        test_rate = testrail_run.run_result(testrail_plan)
+        testrail_no = modal_input_value['testrail_no']['testrail_no']['value']
+        test_rate = testrail_run.run_result(testrail_no)
+        # testrail_run.run_chart(testrail_no)
         test_progress = f"*테스트케이스 진행률* :\n{test_rate}"
+
     except:
         test_progress = " "
     test_result = f"{test_progress}"
@@ -113,25 +115,33 @@ def modal_message():
         dashboard = ""
 
 
-    image_filename = 'chart.png'
-    image_path = os.path.join(current_app.root_path, image_filename)
-    i_response = client.files_upload_v2(channel=channels_id, file=image_path)
-    image = i_response["file"]["url_private"]
-    print(image)
+    # image_filename = 'chart.png'
+    # image_path = os.path.join(current_app.root_path, image_filename)
+    # i_response = client.files_upload_v2(channel=channels_id, file=image_path)
+    # image = i_response["file"]["url_private"]
+    # print(image)
     # image = "https://files.slack.com/files-pri/T058C1KPXDF-F05H03WCU7Q/chart.png"
 
 
     # 슬랙 메시지로 텍스트 입력값 전송
     send_slack_message(
-        mention_user, feature_name, test_result, daily_progress, issue_progress, dashboard, share_user, image
+        mention_user, feature_name, test_result, daily_progress, issue_progress, dashboard, share_user
     )
 
     return ''
 
 
-def send_slack_message(mention_user, feature_name, test_result, daily_progress, issue_progress, dashboard, share_user, image):
+def get_message(channel_id, query):
+    result = client.conversations_history(channel=channel_id)
+    messages = result.data['messages']
+    message = list(filter(lambda m: (query in m["text"]), messages))[0]  # m["text"] == query
+    message_id = message["ts"]
+    return message_id
+
+
+def send_slack_message(mention_user, feature_name, test_result, daily_progress, issue_progress, dashboard, share_user):
     slack_message = slack_message_block.slack_message_block(
-        mention_user, feature_name, test_result, daily_progress, issue_progress, dashboard, share_user, image
+        mention_user, feature_name, test_result, daily_progress, issue_progress, dashboard, share_user
     )
 
     # 슬랙 메시지 전송을 위한 API Endpoint URL
@@ -153,10 +163,12 @@ def send_slack_message(mention_user, feature_name, test_result, daily_progress, 
         data=json.dumps(message)
     )
 
-    # image_filename = 'chart.png'
-    # image_path = os.path.join(current_app.root_path, image_filename)
-    # i_response = client.files_upload_v2(channels=channels_id, file=image_path)
-    # image_url = i_response["file"]["url_private"]
+    # 스레드에 이미지 업로드
+    image_filename = 'chart.png'
+    image_path = os.path.join(current_app.root_path, image_filename)
+
+    message_ts = get_message(channel_id=channels_id, query='QA Daily Report')
+    client.files_upload_v2(channels=channels_id, file=image_path, thread_ts=message_ts)
 
     if reponse.status_code == 200:
         print("메시지 전송 완료")

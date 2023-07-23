@@ -1,7 +1,7 @@
 from datetime import date
 
 
-def slack_message_block(user_id, feature, test_progress, daily_progress, issue_progress, dashboard, share_user, image):
+def slack_message_block(user_id, feature, test_progress, daily_progress, issue_progress, dashboard, share_user):
     message_blocks = [
         {
             "type": "header",
@@ -28,16 +28,16 @@ def slack_message_block(user_id, feature, test_progress, daily_progress, issue_p
                 "text": f"{test_progress}"
             }
         },
-        {
-            "type": "image",
-            "title": {
-                "type": "plain_text",
-                "text": "111"
-            },
-            "image_url": image,
-            "alt_text": "marg"
-
-        },
+        # {
+        #     "type": "image",
+        #     "title": {
+        #         "type": "plain_text",
+        #         "text": "111"
+        #     },
+        #     "image_url": image,
+        #     "alt_text": "marg"
+        #
+        # },
         {
             "type": "section",
             "text": {
